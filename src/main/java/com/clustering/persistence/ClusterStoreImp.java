@@ -8,7 +8,7 @@ import com.clustering.domain.SignObservation;
 import com.clustering.domain.SignType;
 
 /**
- * Draft persistence implementation. It doesn't contain real persistence. Data
+ * Mock persistence implementation. It doesn't contain real persistence. Data
  * is stored as a variable in the instance.  
  */
 public class ClusterStoreImp implements ClusterStore {

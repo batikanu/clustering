@@ -1,8 +1,0 @@
-#!/bin/sh
-
-cat sign_data.csv | while read line; do 
-    curl --data "signObservationStr=$line" http://localhost:8080/clustering 
-
-
-done
-
