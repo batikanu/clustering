@@ -14,7 +14,6 @@ public class ClusterApplicationBinder extends AbstractBinder {
 	protected void configure() {
 		bind(ClusterServiceImp.class).to(ClusterService.class);
 		bind(ClusterStoreImp.class).to(ClusterStore.class);
-
 	}
 
 }

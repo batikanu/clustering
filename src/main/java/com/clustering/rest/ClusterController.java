@@ -1,7 +1,5 @@
 package com.clustering.rest;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -14,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.clustering.business.ClusterService;
-
+import com.clustering.utils.JsonConverter;
 
 @Path("/")
 @Singleton
@@ -22,44 +20,61 @@ public class ClusterController {
 
 	@Inject
 	ClusterService service;
-	
 
 	/**
-	 * Retrieves all clusters
+	 * Retrieves all clusters. Example call http://hostname:port/clustering/all
+	 * 
 	 * @return
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("all")
 	public Response getClusters() {
+		try {
+			return Response.status(200).entity(JsonConverter.convert(service.clusterObservations())).build();
+		} catch (IllegalArgumentException e) {
+			return Response.status(406).entity("Invalid request parameters").build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 
-		String output = "<h1>Hello World!<h1>" + "<p>RESTful Service is running ... <br>Ping @ " + new Date().toString()
-				+ "</p<br>";
-		return Response.status(200).entity(output).build();
 	}
-	
+
 	/**
-	 * Retrieves clusters for given location and radius
-	 * Example call http://localhost:8080/clustering/?lat=48.1171&lon=11.3754&radius=100
-	 * @param lat Latitude
-	 * @param lon Longitude
-	 * @param radius Radius in meters
+	 * Retrieves clusters for given location and radius. Example call: Example
+	 * call: http://hostname:port/clustering/?lat=48.1171&lon=11.3754&radius=100
+	 * 
+	 * @param lat
+	 *            Latitude
+	 * @param lon
+	 *            Longitude
+	 * @param radius
+	 *            Radius in meters
 	 * @return
 	 */
 	@GET
-	@Consumes("text/plain")	
-	@Produces(MediaType.APPLICATION_JSON)	
-	public Response getClustersByLocation(@QueryParam("lat") String lat, @QueryParam("lon") String lon, @QueryParam("radius") String radius) {
+	@Consumes("text/plain")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getClustersByLocation(@QueryParam("lat") double lat, @QueryParam("lon") double lon,
+			@QueryParam("radius") double radius) {
 
-		String output = "<h1>Hello World!<h1>" + "<p>RESTful Service is running ... <br>Ping @ " + new Date().toString()
-				+ "</p<br>";
-		return Response.status(200).entity(output).build();
+		try {
+			String jsonStr = JsonConverter.convert(service.clusterObservationsByDistance(lat, lon, radius));
+			return Response.status(200).entity(jsonStr).build();
+		} catch (IllegalArgumentException e) {
+			return Response.status(406).entity("Invalid request parameters").build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
+
 	}
 
-	
 	/**
-	 * Adds a new observation
-	 * @param signObservationStr (lat,long,heading,sign type, speed)
+	 * Adds a new observation Example call: POST http://hostname:port/clustering
+	 * 
+	 * @param signObservationStr
+	 *            sign observation in string form as "lat,long,heading,sign
+	 *            type, speed"
 	 * @return
 	 */
 	@POST

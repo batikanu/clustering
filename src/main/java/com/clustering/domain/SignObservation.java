@@ -44,7 +44,7 @@ public class SignObservation implements Clusterable {
 		this.speed = speed;
 	}
 
-	public int getSpeed() {
+	public Integer getSpeed() {
 		return speed;
 	}
 
