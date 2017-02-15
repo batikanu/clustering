@@ -1,5 +1,8 @@
 package com.clustering.rest;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -21,6 +24,8 @@ public class ClusterController {
 	@Inject
 	ClusterService service;
 
+	final static Logger logger = Logger.getLogger(ClusterController.class.getName());
+
 	/**
 	 * Retrieves all clusters. Example call http://hostname:port/clustering/all
 	 * 
@@ -29,12 +34,14 @@ public class ClusterController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("all")
-	public Response getClusters() {
+	public Response getClusteredObservations() {
 		try {
 			return Response.status(200).entity(JsonConverter.convert(service.clusterObservations())).build();
 		} catch (IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Request parameters are invalid", e);
 			return Response.status(406).entity("Invalid request parameters").build();
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Request failed with exception", e);
 			return Response.serverError().build();
 		}
 
@@ -55,15 +62,17 @@ public class ClusterController {
 	@GET
 	@Consumes("text/plain")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getClustersByLocation(@QueryParam("lat") double lat, @QueryParam("lon") double lon,
+	public Response getClusteredObservationsByLocation(@QueryParam("lat") double lat, @QueryParam("lon") double lon,
 			@QueryParam("radius") double radius) {
 
 		try {
 			String jsonStr = JsonConverter.convert(service.clusterObservationsByDistance(lat, lon, radius));
 			return Response.status(200).entity(jsonStr).build();
 		} catch (IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Request parameters are invalid", e);
 			return Response.status(406).entity("Invalid request parameters").build();
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Request failed with exception", e);
 			return Response.serverError().build();
 		}
 
@@ -85,8 +94,10 @@ public class ClusterController {
 		try {
 			service.addObservation(signObservationStr);
 		} catch (IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Request parameters are invalid", e);
 			return Response.status(406).entity("Invalid request parameters").build();
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Request failed with exception", e);
 			return Response.serverError().build();
 		}
 

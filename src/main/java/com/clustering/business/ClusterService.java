@@ -8,7 +8,7 @@ import com.clustering.domain.SignObservationPojo;
  * Business logic for clusters 
  */
 public interface ClusterService {
-
+	
 	/**
 	 * Constructs clusters for all observations and returns computed signs for
 	 * each cluster

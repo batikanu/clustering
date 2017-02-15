@@ -2,6 +2,7 @@ package com.clustering.business;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -17,10 +18,12 @@ import com.clustering.domain.SignObservationPojo;
 import com.clustering.domain.SignType;
 
 public class ClusterServiceImp implements ClusterService {
-
+	
 	@Inject
 	ClusterStore store;
 
+	final static Logger logger = Logger.getLogger(ClusterServiceImp.class.getName());
+	
 	// DBScan Epsilon Neighbourhood - 100m should be generous enough.
 	private double EPSILON_NEIGBOURHOOD = 0.1;
 	// We set minPts to 0 to allow clusters of single points.
@@ -64,8 +67,8 @@ public class ClusterServiceImp implements ClusterService {
 				new POIDistanceMeasure());
 		List<Cluster<SignObservation>> clusters = clusterer.cluster(observations);
 
-		System.out.println("Clustering finished.");
-
+		logger.info("Clustering finished.");
+		
 		List<SignObservation> clusterSigns = new LinkedList<SignObservation>();
 
 		for (Cluster<SignObservation> singleCluster : clusters) {
@@ -78,17 +81,12 @@ public class ClusterServiceImp implements ClusterService {
 			Integer clusterSpeed = sampleClusterObservation.getSpeed();
 			SignType clusterType = sampleClusterObservation.getType();
 
-			System.out.println(
-					"CLUSTER START: " + clusterCenter[0] + ", " + clusterCenter[1] + " heading: " + clusterCenter[2]);
+			logger.info("CLUSTER START: " + clusterCenter[0] + ", " + clusterCenter[1] + " heading: " + clusterCenter[2]); 
+			
 
 			clusterSigns.add(new SignObservation(clusterCenter[0], clusterCenter[1], clusterCenter[2], clusterType,
 					clusterSpeed));
-
-			for (SignObservation signObservation : singleCluster.getPoints()) {
-				System.out.println(signObservation.getPoint()[0] + "," + signObservation.getPoint()[1] + " heading: "
-						+ signObservation.getHeading() + "type: " + signObservation.getType() + " speed: "
-						+ signObservation.getSpeed());
-			}
+			
 		}
 		return clusterSigns;
 	}
