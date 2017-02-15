@@ -4,7 +4,7 @@
 	<groupId>com.example.rest</groupId>
 	<artifactId>clustering</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0</version>
 	<name>clustering Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -83,6 +83,20 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcatserver</server>
+					<path>/api</path>
+					<username>admin</username>
+					<password>password</password>
 				</configuration>
 			</plugin>
 

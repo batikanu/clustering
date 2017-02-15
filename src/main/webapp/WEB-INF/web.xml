@@ -17,7 +17,7 @@
 
 
 	<servlet>
-		<servlet-name>com.clustering.rest.MainApplication</servlet-name>
+		<servlet-name>cluster</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
@@ -27,20 +27,8 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>com.clustering.rest.MainApplication</servlet-name>
-		<url-pattern>/api/*</url-pattern>
+		<servlet-name>cluster</servlet-name>
+		<url-pattern>/clustering/*</url-pattern>
 	</servlet-mapping>
-
-	
-
-	<!-- Servlet mapping can be omitted in case the Application subclass is 
-		annotated with @ApplicationPath annotation; in such case the mapping would 
-		be automatically added by Jersey -->
-	
-	<!-- <servlet> <servlet-name>clustering</servlet-name> <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class> 
-		<init-param> <param-name>com.sun.jersey.config.property.packages</param-name> 
-		<param-value>com.clustering.rest</param-value> </init-param> <load-on-startup>1</load-on-startup> 
-		</servlet> <servlet-mapping> <servlet-name>clustering</servlet-name> <url-pattern></url-pattern> 
-		</servlet-mapping> -->
 
 </web-app>
